@@ -58,6 +58,7 @@ pipeline {
             }
         }
 
+
         stage('Terraform Plan') {
             when { 
                 expression { runStage() }

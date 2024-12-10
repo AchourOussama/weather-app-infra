@@ -58,7 +58,13 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'terraform plan -out=tfplan'
+                    // sh 'terraform plan -out=tfplan'
+                    withCredentials([string(credentialsId: 'SUBSCRIPTION_ID', variable: 'SUBSCRIPTION_ID')]) {
+                        // Set the subscription ID for terraform plan
+                        sh """
+                            terraform plan -out=tfplan -var="subscription_id=${SUBSCRIPTION_ID}"
+                        """
+                    }
                 }
             }
         }

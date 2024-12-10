@@ -12,9 +12,9 @@ def runStage() {
 }
 pipeline {
     agent any
-    environment {
-        AWS_DEFAULT_REGION = 'your-aws-region'
-    }
+    // environment {
+    //     AWS_DEFAULT_REGION = 'your-aws-region'
+    // }
     stages {
         stage('Checkout Code') {
             steps {
@@ -44,23 +44,23 @@ pipeline {
             }
         }
 
-        stage('Terraform Destroy') {
-            when { 
-                expression { runStage() }
-            }
-            when {
-                // Destroy resources only if you want to trigger it explicitly
-                expression {
-                    return params.DESTROY == 'true'
-                }
-            }
-            steps {
-                script {
-                    // Destroy resources if DESTROY parameter is true
-                    sh 'terraform destroy -auto-approve'
-                }
-            }
-        }
+        // stage('Terraform Destroy') {
+        //     when { 
+        //         expression { runStage() }
+        //     }
+        //     when {
+        //         // Destroy resources only if you want to trigger it explicitly
+        //         expression {
+        //             return params.DESTROY == 'true'
+        //         }
+        //     }
+        //     steps {
+        //         script {
+        //             // Destroy resources if DESTROY parameter is true
+        //             sh 'terraform destroy -auto-approve'
+        //         }
+        //     }
+        // }
         // stage('Upload State to S3') {
         //     steps {
         //         script {

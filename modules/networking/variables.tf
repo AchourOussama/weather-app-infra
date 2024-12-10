@@ -65,10 +65,3 @@ variable "subnets" {
 #     default     = "backend-subnet"
 #     description = "Backend network name"
 # }
-
-
-# variable "backend_subnet_address_space" {
-#   type        = list(string)
-#   default     = ["10.0.1.0/24"]
-#   description = "Address space for the Backend network"
-# }

@@ -8,7 +8,7 @@ def runStage() {
    echo "Current changeset: ${CHANGE_SET}"
    
    // Check for changes in specified directories or files 
-   return CHANGE_SET =~ /(.*terraform.*)/
+   return CHANGE_SET =~ /(.modules.*)/
 }
 pipeline {
     agent any

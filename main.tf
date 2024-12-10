@@ -1,5 +1,5 @@
 module "virtual_network" {
-  source              = "./networking"
+  source              = "./modules/networking"
   name                = "weather-app-net"
   resource_group_name = "weather-app-rg"
   location            = "West Europe"
@@ -19,7 +19,7 @@ module "virtual_network" {
 }
 
 module "app_services" {
-  source               = "./app-services"
+  source               = "./modules/app-services"
   service_plan_name    = "weather-web-app-sp"
   location             = module.virtual_network.resource_group_location
   resource_group_name  = module.virtual_network.resource_group_name

@@ -75,16 +75,16 @@ pipeline {
             }
         }
 
-        stage('Terraform Apply') {
-            when { 
-                expression { runStage() }
-            }
-            steps {
-                script {
-                    sh 'terraform apply -auto-approve tfplan'
-                }
-            }
-        }
+        // stage('Terraform Apply') {
+        //     when { 
+        //         expression { runStage() }
+        //     }
+        //     steps {
+        //         script {
+        //             sh 'terraform apply -auto-approve tfplan'
+        //         }
+        //     }
+        // }
 
         // stage('Terraform Destroy') {
         //     when { 

@@ -25,27 +25,45 @@ pipeline {
                 checkout scm
             }
         }
+        // stage('Install Azure CLI') {
+        //     steps {
+        //         script {
+        //             // Update apt repository and install dependencies
+        //             sh '''
+        //                 curl -sL https://aka.ms/InstallAzureCLIDeb |  bash
+        //             '''
+        //         }
+        //     }
+        // }
         stage('Install Azure CLI') {
             steps {
                 script {
-                    // Update apt repository and install dependencies
-                    sh '''
-                        curl -sL https://aka.ms/InstallAzureCLIDeb |  bash
-                    '''
+                    // Check if az CLI is already installed
+                    def azInstalled = sh(script: 'which az', returnStatus: true)
+                    if (azInstalled != 0) {
+                        echo 'Azure CLI not found. Installing...'
+                        // Install Azure CLI if not found
+                        sh '''
+                            curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+                        '''
+                    } else {
+                        echo 'Azure CLI is already installed.'
+                    }
                 }
             }
         }
 
-        stage('Login to Azure') {
-            steps {
-                script {
-                    // Use service principal or interactive login
-                    sh '''
-                        az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-                    '''
-                }
-            }
-        }
+
+        // stage('Login to Azure') {
+        //     steps {
+        //         script {
+        //             // Use service principal or interactive login
+        //             sh '''
+        //                 az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+        //             '''
+        //         }
+        //     }
+        // }
 
         stage('Install Terraform') {
             steps {

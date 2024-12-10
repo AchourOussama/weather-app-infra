@@ -12,6 +12,12 @@ def runStage() {
 }
 pipeline {
     agent any
+    environment {
+        AZURE_CLIENT_ID     = credentials('azure-client-id')
+        AZURE_CLIENT_SECRET = credentials('azure-client-secret')
+        AZURE_TENANT_ID     = credentials('azure-tenant-id')
+        AZURE_SUBSCRIPTION_ID = credentials('subscription-id')
+    }
     
     stages {
         stage('Checkout Code') {
@@ -58,13 +64,12 @@ pipeline {
             }
             steps {
                 script {
-                    // sh 'terraform plan -out=tfplan'
-                    withCredentials([string(credentialsId: 'SUBSCRIPTION_ID', variable: 'SUBSCRIPTION_ID')]) {
-                        // Set the subscription ID for terraform plan
-                        sh """
-                            terraform plan -out=tfplan -var="subscription_id=${SUBSCRIPTION_ID}"
-                        """
-                    }
+                    sh """
+                        terraform plan -out=tfplan -var="subscription_id=${AZURE_SUBSCRIPTION_ID}" \
+                            -var="client_id=${AZURE_CLIENT_ID}" \
+                            -var="client_secret=${AZURE_CLIENT_SECRET}" \
+                            -var="tenant_id=${AZURE_TENANT_ID}"
+                    """
                 }
             }
         }

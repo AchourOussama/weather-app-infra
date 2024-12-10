@@ -37,3 +37,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 main-backup.tf
+private-endpoint
+private-endpoint/*

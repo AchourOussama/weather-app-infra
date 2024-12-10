@@ -41,7 +41,16 @@ pipeline {
                 '''
             }
         }
-
+        stage('Terraform Init') {
+            when {
+                expression { runStage() }
+            }
+            steps {
+                script {
+                    sh 'terraform init'
+                }
+            }
+        }
 
         stage('Terraform Plan') {
             when { 

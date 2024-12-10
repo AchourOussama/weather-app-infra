@@ -25,16 +25,7 @@ pipeline {
                 checkout scm
             }
         }
-        // stage('Install Azure CLI') {
-        //     steps {
-        //         script {
-        //             // Update apt repository and install dependencies
-        //             sh '''
-        //                 curl -sL https://aka.ms/InstallAzureCLIDeb |  bash
-        //             '''
-        //         }
-        //     }
-        // }
+      
         stage('Install Azure CLI') {
             steps {
                 script {

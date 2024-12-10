@@ -8,7 +8,7 @@ def runStage() {
    echo "Current changeset: ${CHANGE_SET}"
    
    // Check for changes in specified directories or files 
-   return CHANGE_SET =~ /(.*modules.*)/
+   return CHANGE_SET =~ /(.*modules.*|Jenkinsfile)/
 }
 pipeline {
     agent any
@@ -19,7 +19,29 @@ pipeline {
                 checkout scm
             }
         }
-        
+        stage('Install Terraform') {
+            steps {
+                sh '''
+                    # Check if Terraform exists otherwise install it 
+                    if ! command -v terraform 2>&1 >/dev/null; then
+                        export terraformVersion = '1.10.1'
+                        echo "Terraform not found. Installing..."
+                        curl -LO "https://releases.hashicorp.com/terraform/${terraformVersion}/terraform_${terraformVersion}_linux_arm64.zip"
+                        unzip -o terraform_${terraformVersion}_linux_amd64.zip
+                        chmod u+x ./terraform
+                        mv ./terraform /bin/terraform
+                        terraform version
+                    else
+                        echo "Terraform is already installed."
+                    fi
+
+                    # Display the Terraform version
+                    terraform version
+                '''
+                
+            }
+        }
+
         stage('Terraform Plan') {
             when { 
                 expression { runStage() }

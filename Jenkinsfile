@@ -25,6 +25,28 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Install Azure CLI') {
+            steps {
+                script {
+                    // Update apt repository and install dependencies
+                    sh '''
+                        curl -sL https://aka.ms/InstallAzureCLIDeb |  bash
+                    '''
+                }
+            }
+        }
+
+        stage('Login to Azure') {
+            steps {
+                script {
+                    // Use service principal or interactive login
+                    sh '''
+                        az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+                    '''
+                }
+            }
+        }
+
         stage('Install Terraform') {
             steps {
                 sh '''

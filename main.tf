@@ -22,7 +22,7 @@ module "app_services" {
 }
 
 resource "azurerm_storage_account" "test" {
-  name                     = "test"
+  name                     = "ousstest"
   resource_group_name  = module.resource_group.name
   location             = module.resource_group.location
   account_tier             = "Standard"

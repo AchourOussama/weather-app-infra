@@ -95,12 +95,17 @@ pipeline {
                 expression { runStage() }
             }
             steps {
+                // script {
+                //     sh """
+                //         terraform plan -out=tfplan -var="AZURE_SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID}" \
+                //             -var="AZURE_CLIENT_ID=${AZURE_CLIENT_ID}" \
+                //             -var="AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}" \
+                //             -var="AZURE_TENANT_ID=${AZURE_TENANT_ID}"
+                //     """
+                // }
                 script {
                     sh """
-                        terraform plan -out=tfplan -var="AZURE_SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID}" \
-                            -var="AZURE_CLIENT_ID=${AZURE_CLIENT_ID}" \
-                            -var="AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}" \
-                            -var="AZURE_TENANT_ID=${AZURE_TENANT_ID}"
+                        terraform plan -out=tfplan
                     """
                 }
             }

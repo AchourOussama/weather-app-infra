@@ -106,16 +106,30 @@ pipeline {
             }
         }
 
-        // stage('Terraform Apply') {
-        //     when { 
-        //         expression { runStage() }
-        //     }
-        //     steps {
-        //         script {
-        //             sh 'terraform apply -auto-approve tfplan'
-        //         }
-        //     }
-        // }
+        stage('Approval Gate') {
+            steps {
+                script {
+                    def userInput = input message: 'Approve Terraform Apply?', 
+                                        parameters: [choice(name: 'Decision', 
+                                                            choices: ['Abort', 'Proceed'], 
+                                                            description: 'Select your decision')]
+                    if (userInput == 'Abort') {
+                        error('Pipeline aborted by user')
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            when { 
+                expression { runStage() }
+            }
+            steps {
+                script {
+                    sh 'terraform apply -auto-approve tfplan'
+                }
+            }
+        }
 
         // stage('Terraform Destroy') {
         //     when { 

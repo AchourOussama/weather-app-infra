@@ -8,7 +8,7 @@ def runStage() {
    echo "Current changeset: ${CHANGE_SET}"
    
    // Check for changes in specified directories or files 
-   return CHANGE_SET =~ /(.*modules.*|Jenkinsfile)/
+   return CHANGE_SET =~ /(.*modules.*|Jenkinsfile)|main.tf/
 }
 pipeline {
     agent any
@@ -106,19 +106,6 @@ pipeline {
             }
         }
 
-        // stage('Approval Gate') {
-        //     steps {
-        //         script {
-        //             def userInput = input message: 'Approve Terraform Apply?', 
-        //                                 parameters: [choice(name: 'Decision', 
-        //                                                     choices: ['Abort', 'Proceed'], 
-        //                                                     description: 'Select your decision')]
-        //             if (userInput == 'Abort') {
-        //                 error('Pipeline aborted by user')
-        //             }
-        //         }
-        //     }
-        // }
         stage('Waiting for Approval'){
             steps {
                 timeout(time: 10, unit: 'MINUTES') {

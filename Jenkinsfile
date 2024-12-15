@@ -106,18 +106,26 @@ pipeline {
             }
         }
 
-        stage('Approval Gate') {
+        // stage('Approval Gate') {
+        //     steps {
+        //         script {
+        //             def userInput = input message: 'Approve Terraform Apply?', 
+        //                                 parameters: [choice(name: 'Decision', 
+        //                                                     choices: ['Abort', 'Proceed'], 
+        //                                                     description: 'Select your decision')]
+        //             if (userInput == 'Abort') {
+        //                 error('Pipeline aborted by user')
+        //             }
+        //         }
+        //     }
+        // }
+        stage('Waiting for Approval'){
             steps {
-                script {
-                    def userInput = input message: 'Approve Terraform Apply?', 
-                                        parameters: [choice(name: 'Decision', 
-                                                            choices: ['Abort', 'Proceed'], 
-                                                            description: 'Select your decision')]
-                    if (userInput == 'Abort') {
-                        error('Pipeline aborted by user')
-                    }
+                timeout(time: 10, unit: 'MINUTES') {
+                    input (message: "Deploy the infrastructure?")
                 }
             }
+
         }
 
         stage('Terraform Apply') {
@@ -156,9 +164,9 @@ pipeline {
         //     }
         // }
     }
-    post {
-        always {
-            cleanWs()
-        }
-    }
+    // post {
+    //     always {
+    //         cleanWs()
+    //     }
+    // }
 }

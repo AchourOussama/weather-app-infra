@@ -1,8 +1,8 @@
 variable "location" {
     default="West Europe"
     description = "Region where to deploy resources"
-  
 }
+
 variable "AZURE_SUBSCRIPTION_ID" {
     type = string
     sensitive = true

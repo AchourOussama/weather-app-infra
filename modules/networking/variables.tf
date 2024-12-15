@@ -1,15 +1,11 @@
 variable "location" {
     type        = string
-    default     = "West Europe"
     description = "Region where to deploy resources"
-  
 }
 
 variable "resource_group_name" {
     type        = string
-    default     = "weather-app-rg"
-    description = "Name of the resource group"
-  
+    description = "Name of the resource group"  
 }
 
 variable "name" {

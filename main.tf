@@ -1,8 +1,14 @@
+module "resource_group" {
+  source = "./modules/resource-group"
+  name = "weather-app-rg"
+  location = var.location
+}
+
 module "virtual_network" {
   source              = "./modules/networking"
   name                = "weather-app-net"
-  resource_group_name = "weather-app-rg"
-  location            = "West Europe"
+  resource_group_name = module.resource_group.name
+  location            = module.resource_group.location
   address_space       = ["10.0.0.0/16"]
   subnets = {
     "frontend-subnet" = {
@@ -21,8 +27,8 @@ module "virtual_network" {
 module "app_services" {
   source               = "./modules/app-services"
   service_plan_name    = "weather-web-app-sp"
-  location             = module.virtual_network.resource_group_location
-  resource_group_name  = module.virtual_network.resource_group_name
+  resource_group_name  = module.resource_group.name
+  location             = module.resource_group.location
   os_type              = "Linux"
   sku_name             = "B1"
   apps = {

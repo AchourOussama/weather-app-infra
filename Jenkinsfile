@@ -105,7 +105,7 @@ pipeline {
                 // }
                 script {
                     sh """
-                        terraform plan -out=tfplan
+                        terraform plan -out=tfplan -var="AZURE_SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID}"
                     """
                 }
             }

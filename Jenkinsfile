@@ -13,9 +13,6 @@ def runStage() {
 pipeline {
     agent any
     environment {
-        AZURE_CLIENT_ID     = credentials('azure-client-id')
-        AZURE_CLIENT_SECRET = credentials('azure-client-secret')
-        AZURE_TENANT_ID     = credentials('azure-tenant-id')
         AZURE_SUBSCRIPTION_ID = credentials('subscription-id')
     }
     
@@ -43,18 +40,6 @@ pipeline {
                 }
             }
         }
-
-
-        // stage('Login to Azure') {
-        //     steps {
-        //         script {
-        //             // Use service principal or interactive login
-        //             sh '''
-        //                 az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-        //             '''
-        //         }
-        //     }
-        // }
 
         stage('Install Terraform') {
             steps {
@@ -89,20 +74,11 @@ pipeline {
             }
         }
 
-
         stage('Terraform Plan') {
             when { 
                 expression { runStage() }
             }
             steps {
-                // script {
-                //     sh """
-                //         terraform plan -out=tfplan -var="AZURE_SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID}" \
-                //             -var="AZURE_CLIENT_ID=${AZURE_CLIENT_ID}" \
-                //             -var="AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}" \
-                //             -var="AZURE_TENANT_ID=${AZURE_TENANT_ID}"
-                //     """
-                // }
                 script {
                     sh """
                         terraform plan -out=tfplan -var="AZURE_SUBSCRIPTION_ID=${AZURE_SUBSCRIPTION_ID}"
@@ -130,35 +106,10 @@ pipeline {
                 }
             }
         }
-
-        // stage('Terraform Destroy') {
-        //     when { 
-        //         expression { runStage() }
-        //     }
-        //     when {
-        //         // Destroy resources only if you want to trigger it explicitly
-        //         expression {
-        //             return params.DESTROY == 'true'
-        //         }
-        //     }
-        //     steps {
-        //         script {
-        //             // Destroy resources if DESTROY parameter is true
-        //             sh 'terraform destroy -auto-approve'
-        //         }
-        //     }
-        // }
-        // stage('Upload State to S3') {
-        //     steps {
-        //         script {
-        //             sh 'aws s3 cp terraform.tfstate s3://your-bucket-name'
-        //         }
-        //     }
-        // }
     }
-    // post {
-    //     always {
-    //         cleanWs()
-    //     }
-    // }
+    post {
+        always {
+            cleanWs()
+        }
+    }
 }
